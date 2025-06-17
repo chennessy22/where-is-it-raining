@@ -83,30 +83,7 @@
   while (tries < 10) {
     city = cities[Math.floor(Math.random() * cities.length)];
     try {
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherApiKey}`);
-      const data = await res.json();
-
-      console.log(`Checked ${city}:`, data);
-
-      const isRainy = data.weather?.some(w => /rain|drizzle|thunderstorm/i.test(w.description));
-
-      if (isRainy) {
-        weather = data;
-        break;
-      }
-    } catch (e) {
-      console.error(`Error fetching weather for ${city}`, e);
-    }
-
-    tries++;
-  }
-
-  if (weather) {
-    showWeather(city, weather);
-    setBackgroundImage(city);
-  } else {
-    document.getElementById("city-name").innerText = "Nowhere right now 😢";
-    document.getElementById("weather-info").innerText = `Just checked ${city}, try again!`;
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
   }
     }
 
