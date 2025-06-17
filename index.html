@@ -59,7 +59,9 @@
   #spinner {
   font-size: 1.2rem;
   margin-top: 1rem;
-  display: none;
+  color: white;
+  display: block;
+  visibility: hidden;
 }
 </style>
 </head>
@@ -68,7 +70,7 @@
     <h1>It's raining in...</h1>
     <h2 id="city-name">Loading...</h2>
     <p id="weather-info"></p>
-<p id="spinner">Loading...</p>
+<p id="spinner" style="visibility:hidden">Loading...</p>
     <button id="refresh-btn">Find Another Rainy Place</button>
   </div>
 
@@ -84,7 +86,7 @@
     const pexelsApiKey = "uFiEmIQ1hEKW3tWRbVpi1oLkXXYCTEIw0xr1JqNJNP2xBu2fMZfSpMaA";
 
     async function getRandomRainyCity() {
-      document.getElementById("spinner").style.display = "block";
+      document.getElementById("spinner").style.visibility = "visible";
       document.getElementById("city-name").innerText = "Loading...";
       document.getElementById("weather-info").innerText = "";
 
@@ -113,7 +115,7 @@
         tries++;
       }
 
-      document.getElementById("spinner").style.display = "none";
+      document.getElementById("spinner").style.visibility = "hidden";
 
       if (weather) {
         showWeather(city, weather);
@@ -130,7 +132,18 @@
     }
 
     async function setBackgroundImage(city) {
-      const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(city + ' rain')}&per_page=1`, {
+  const res = await fetch(`https://api.pexels.com/v1/search?query=rain&per_page=20`, {
+    headers: {
+      Authorization: pexelsApiKey
+    }
+  });
+  const data = await res.json();
+  const image = data.photos.find(photo => photo.location?.city?.toLowerCase() === city.toLowerCase());
+  const imageUrl = image?.src?.landscape || data.photos[0]?.src?.landscape;
+  if (imageUrl) {
+    document.body.style.backgroundImage = `url(${imageUrl})`;
+  }
+}&per_page=1`, {
         headers: {
           Authorization: pexelsApiKey
         }
@@ -147,3 +160,4 @@
   </script>
 </body>
 </html>
+
