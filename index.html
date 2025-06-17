@@ -108,23 +108,6 @@
     document.getElementById("city-name").innerText = "Nowhere right now 😢";
     document.getElementById("weather-info").innerText = `Just checked ${city}, try again!`;
   }
-}&appid=${weatherApiKey}`);
-        const data = await weatherRes.json();
-
-        if (data.weather && /rain|drizzle|thunderstorm/i.test(data.weather[0].description)) {
-          weather = data;
-          break;
-        }
-        tries++;
-      }
-
-      if (weather) {
-        showWeather(city, weather);
-        setBackgroundImage(city);
-      } else {
-        document.getElementById("city-name").innerText = "Nowhere right now 😢";
-        document.getElementById("weather-info").innerText = "Try again!";
-      }
     }
 
     function showWeather(city, data) {
