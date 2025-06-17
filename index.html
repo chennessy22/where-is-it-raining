@@ -68,23 +68,47 @@
 
   <script>
     const cities = [
-  "Tokyo", "New York", "Mumbai", "London", "Sao Paulo", "Singapore", "Sydney", "Paris", "Moscow", "Cape Town",
-  "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose",
-  "Austin", "Jacksonville", "Fort Worth", "Columbus", "Charlotte", "Indianapolis", "Seattle", "Denver", "Washington",
-  "Boston", "El Paso", "Nashville", "Detroit", "Portland", "Las Vegas", "Memphis", "Louisville", "Baltimore"
-];
-    const weatherApiKey = "71df22c050d1f240b8e74067bbda9656"; // Replace with your actual key
+      "Tokyo", "New York", "Mumbai", "London", "Sao Paulo", "Singapore", "Sydney", "Paris", "Moscow", "Cape Town",
+      "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose",
+      "Austin", "Jacksonville", "Fort Worth", "Columbus", "Charlotte", "Indianapolis", "Seattle", "Denver", "Washington",
+      "Boston", "El Paso", "Nashville", "Detroit", "Portland", "Las Vegas", "Memphis", "Louisville", "Baltimore"
+    ];
+
+    const weatherApiKey = "71df22c050d1f240b8e74067bbda9656";
     const pexelsApiKey = "uFiEmIQ1hEKW3tWRbVpi1oLkXXYCTEIw0xr1JqNJNP2xBu2fMZfSpMaA";
 
     async function getRandomRainyCity() {
-  let city, weather;
-  let tries = 0;
+      let city, weather;
+      let tries = 0;
 
-  while (tries < 10) {
-    city = cities[Math.floor(Math.random() * cities.length)];
-    try {
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
-  }
+      while (tries < 10) {
+        city = cities[Math.floor(Math.random() * cities.length)];
+        try {
+          const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherApiKey}`);
+          const data = await res.json();
+
+          console.log(`Checked ${city}:`, data);
+
+          const isRainy = data.weather?.some(w => /rain|drizzle|thunderstorm/i.test(w.description));
+
+          if (isRainy) {
+            weather = data;
+            break;
+          }
+        } catch (e) {
+          console.error(`Error fetching weather for ${city}`, e);
+        }
+
+        tries++;
+      }
+
+      if (weather) {
+        showWeather(city, weather);
+        setBackgroundImage(city);
+      } else {
+        document.getElementById("city-name").innerText = "Nowhere right now 😢";
+        document.getElementById("weather-info").innerText = `Just checked ${city}, try again!`;
+      }
     }
 
     function showWeather(city, data) {
