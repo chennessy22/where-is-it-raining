@@ -67,7 +67,12 @@
   </div>
 
   <script>
-    const cities = ["Tokyo", "New York", "Mumbai", "London", "Sao Paulo", "Singapore", "Sydney", "Paris", "Moscow", "Cape Town"];
+    const cities = [
+  "Tokyo", "New York", "Mumbai", "London", "Sao Paulo", "Singapore", "Sydney", "Paris", "Moscow", "Cape Town",
+  "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose",
+  "Austin", "Jacksonville", "Fort Worth", "Columbus", "Charlotte", "Indianapolis", "Seattle", "Denver", "Washington",
+  "Boston", "El Paso", "Nashville", "Detroit", "Portland", "Las Vegas", "Memphis", "Louisville", "Baltimore"
+];
     const weatherApiKey = "71df22c050d1f240b8e74067bbda9656"; // Replace with your actual key
     const pexelsApiKey = "uFiEmIQ1hEKW3tWRbVpi1oLkXXYCTEIw0xr1JqNJNP2xBu2fMZfSpMaA";
 
@@ -80,7 +85,7 @@
         const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherApiKey}`);
         const data = await weatherRes.json();
 
-        if (data.weather && data.weather[0].main.toLowerCase().includes("rain")) {
+        if (data.weather && /rain|drizzle|thunderstorm/i.test(data.weather[0].description)) {
           weather = data;
           break;
         }
@@ -119,4 +124,3 @@
   </script>
 </body>
 </html>
-
